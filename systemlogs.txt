@@ -1,0 +1,391 @@
+1.stack_using_array
+
+#include<stdio.h>
+int stack[100],choice,n,top,x,i;
+void push(void);
+void pop(void);
+void display(void);
+int main()
+{    top=-1;
+    printf("\n Enter the size of STACK[MAX=100]:");
+    scanf("%d",&n);
+    printf("\n\t STACK OPERATIONS USING ARRAY");
+    printf("\n\t--------------------------------");
+    printf("\n\t 1.PUSH\n\t 2.POP\n\t 3.DISPLAY\n\t 4.EXIT");
+    do
+    {        printf("\n Enter the Choice:");
+        scanf("%d",&choice);
+        switch(choice)
+        {            case 1:       {       push();
+                break;            }
+            case 2:            {                pop();
+                break;            }
+            case 3:            {                display();
+                break;            }
+            case 4:            {                printf("\n\t EXIT POINT ");
+                break;            }
+            default:            {
+                printf ("\n\t Please Enter a Valid Choice(1/2/3/4)");            }   
+        }    }
+    while(choice!=4);
+    return 0;}
+void push()
+{    if(top>=n-1)
+    {        printf("\n\tSTACK is over flow");   
+    }    else    {
+        printf(" Enter a value to be pushed:");
+        scanf("%d",&x);
+        top++;
+        stack[top]=x;    }}
+void pop()
+{    if(top<=-1)
+    {        printf("\n\t Stack is under flow");    }
+    else    {
+        printf("\n\t The popped elements is %d",stack[top]);
+        top--;    }}
+void display()
+{    if(top>=0)
+    {        printf("\n The elements in STACK \n");
+        for(i=top; i>=0; i--)
+            printf("\n%d",stack[i]);
+        printf("\n Press Next Choice");    }
+    else    {
+        printf("\n The STACK is empty");    }  
+}
+
+2.infix_postfix
+
+#include<stdio.h>
+#include<ctype.h>
+char stack[100];
+int top = -1;
+void push(char x)
+{    stack[++top] = x;
+}
+char pop()
+{    if(top == -1)
+        return -1;
+ else
+        return stack[top--];}
+int priority(char x)
+{    if(x == '(')
+        return 0;
+    if(x == '+' || x == '-')
+        return 1;
+    if(x == '*' || x == '/')
+        return 2;
+    return 0;
+}
+int main()
+{    char exp[100];
+    char *e, x;
+    printf("Enter the expression : ");
+    scanf("%s",exp);
+    printf("\n");
+    e = exp;
+    while(*e != '\0')
+    {        if(isalnum(*e))
+            printf("%c ",*e);
+        else if(*e == '(')
+            push(*e);
+        else if(*e == ')')
+        {       while((x = pop()) != '(')
+                printf("%c ", x);
+        }
+        else
+        {
+            while(priority(stack[top]) >= priority(*e))
+                printf("%c ",pop());
+            push(*e);
+        }
+        e++;
+    }
+        while(top != -1)
+    {
+        printf("%c ",pop());
+    }
+    getch();
+    return 0;
+}
+
+
+3.postfix_eval
+
+#include<stdio.h>
+int stack[20];
+int top = -1;
+
+void push(int x)
+{
+    stack[++top] = x;
+}
+
+int pop()
+{
+    return stack[top--];
+}
+
+int main()
+{
+    char exp[20];
+    char *e;
+    int n1,n2,n3,num;
+    printf("Enter the expression :: ");
+    scanf("%s",exp);
+    e = exp;
+    while(*e != '\0')
+    {
+        if(isdigit(*e))
+        {
+            num = *e - 48;
+            push(num);
+        }
+        else
+        {
+            n1 = pop();
+            n2 = pop();
+            switch(*e)
+            {
+            case '+':
+            {
+                n3 = n1 + n2;
+                break;
+            }
+            case '-':
+            {
+                n3 = n2 - n1;
+                break;
+            }
+            case '*':
+            {
+                n3 = n1 * n2;
+                break;
+            }
+            case '/':
+            {
+                n3 = n2 / n1;
+                break;
+            }
+            }
+            push(n3);
+        }
+        e++;
+    }
+    printf("\nThe result of expression %s  =  %d\n\n",exp,pop());
+    return 0;
+}
+
+
+4.check_parenthesis
+
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+struct stack {
+  char stck[MAX];
+  int top;}s;
+void push(char item) {
+  if (s.top == (MAX - 1))
+    printf("Stack is Full\n");
+  else {
+    s.top = s.top + 1;
+    s.stck[s.top] = item;  }}
+void pop() {
+  if (s.top == -1)
+    printf("Stack is Empty\n");
+  else
+    s.top = s.top - 1;}
+int checkPair(char val1,char val2){
+    return (( val1=='(' && val2==')' )||( val1=='[' && val2==']' )||( val1=='{' && val2=='}' ));}
+int checkBalanced(char expr[], int len){
+          for (int i = 0; i < len; i++)  
+    {         if (expr[i] == '(' || expr[i] == '[' || expr[i] == '{')  
+        {            push(expr[i]);         }         else
+        {            // exp = {{}}}
+            // if you look closely above {{}} will be matched with pair, Thus, stack "Empty"
+            //but an extra closing parenthesis like '}' will never be matched
+            //so there is no point looking forward
+        if (s.top == -1) 
+            return 0;
+        else if(checkPair(s.stck[s.top],expr[i]))
+        {            pop();
+            continue;        }
+         
+        return 0;        }    }    
+    return 1; }
+int main() {
+  char exp[MAX] = "({})[]{}";
+  int i = 0;
+  s.top = -1;
+  int len = strlen(exp);
+  checkBalanced(exp, len)?printf("Balanced"): printf("Not Balanced"); 
+  return 0;}
+
+5.Implementing_singly_linked_list
+
+#include<stdio.h>
+#include<stdlib.h>
+struct Node
+{  int data;
+  struct Node *next;};
+void deleteStart (struct Node **head)
+{  struct Node *temp = *head;
+  // if there are no nodes in Linked List can't delete
+  if (*head == NULL)
+    {      printf ("Linked List Empty, nothing to delete");
+      return;    }
+  // move head to next node
+  *head = (*head)->next;
+  printf ("\n%d deleted\n", temp->data);
+  free (temp);}
+void insertStart (struct Node **head, int data)
+{  // dynamically create memory for this newNode
+  struct Node *newNode = (struct Node *) malloc (sizeof (struct Node));
+  // assign data value
+  newNode->data = data;
+  // change the next node of this newNode
+  // to current head of Linked List
+  newNode->next = *head;
+
+  //re-assign head to this newNode
+  *head = newNode;
+  printf ("\n%d Inserted\n", newNode->data);}
+void display (struct Node *node)
+{  printf ("\nLinked List: ");
+  // as linked list will end when Node is Null
+  while (node != NULL)
+    {      printf ("%d ", node->data);
+      node = node->next;    }
+  printf ("\n");}
+int main ()
+{  struct Node *head = NULL;
+  // Need '&' i.e. address as we need to change head
+  insertStart (&head, 100);
+  insertStart (&head, 80);
+  insertStart (&head, 60);
+  insertStart (&head, 40);
+  insertStart (&head, 20);
+  // No Need for '&' as not changing head in display operation
+  display (head);
+  deleteStart (&head);
+  deleteStart (&head);
+  display (head);
+  return 0;
+}
+
+6.implementing circular queue using an ARRAY
+
+#include<stdio.h>
+#define capacity 6
+int queue[capacity];
+int front = -1, rear = -1;
+// Here we check if the Circular queue is full or not
+int checkFull ()
+{  if ((front == rear + 1) || (front == 0 && rear == capacity - 1))
+    {      return 1;    }
+  return 0;}
+// Here we check if the Circular queue is empty or not
+int checkEmpty ()
+{  if (front == -1)
+    {      return 1;    }
+  return 0;}
+// Addtion in the Circular Queue
+void enqueue (int value)
+{  if (checkFull ())
+    printf ("Overflow condition\n");
+  else    {      if (front == -1)
+	front = 0;
+      rear = (rear + 1) % capacity;
+      queue[rear] = value;
+      printf ("%d was enqueued to circular queue\n", value);    }}
+
+// Removal from the Circular Queue
+int dequeue ()
+{  int variable;
+  if (checkEmpty ())
+    {      printf ("Underflow condition\n");
+      return -1;    }
+  else    {
+      variable = queue[front];
+      if (front == rear)
+	{	  front = rear = -1;	}
+      else	{
+	  front = (front + 1) % capacity;	}
+      printf ("%d was dequeued from circular queue\n", variable);
+      return 1;    }}
+// Display the queue
+void print ()
+{  int i;
+  if (checkEmpty ())
+    printf ("Nothing to dequeue\n");
+  else    {
+      printf ("\nThe queue looks like: \n");
+      for (i = front; i != rear; i = (i + 1) % capacity)
+	{	  printf ("%d ", queue[i]);
+	}
+      printf ("%d \n\n", queue[i]);    }}
+int main ()
+{  // Not possible as the Circular queue is empty
+  dequeue ();  
+ enqueue (15);   
+enqueue (20);
+  enqueue (25);
+  enqueue (30);
+  enqueue (35);
+  print ();
+  dequeue ();
+  dequeue ();
+  print ();  
+enqueue (40);
+  enqueue (45);
+  enqueue (50);
+  enqueue (55);			//Overflow condition
+  print (); 
+  return 0;}
+
+7.linear queue using linked list
+
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{	int data;
+	struct node* next;
+};//defining linked list to implement queue
+struct node *front = NULL;
+struct node *rear = NULL;
+void enqueue(int d)//function to insert a node in queue
+{	struct node* new_n;
+	new_n = (struct node*)malloc(sizeof(struct node));
+	new_n->data = d;
+	new_n->next = NULL;
+	if((front == NULL)&&(rear == NULL)){
+		front = rear = new_n;	}
+	else{		rear->next = new_n;
+		rear = new_n;	}	}
+void display()//function to display the queue
+{	struct node* temp;
+	if((front == NULL)&&(rear == NULL)){
+		printf("\nQueue is Empty");	}
+	else{		temp = front;
+		while(temp){
+			printf(" %d ",temp->data);
+			temp = temp->next;		}	}}
+void dequeue()//function to delete an element from a queue
+{	struct node *temp;
+	temp = front;
+	if((front == NULL)&&(rear == NULL)){
+		printf("\nQueue is Empty");	}
+	else{		front = front->next;
+		free(temp);	}}
+int main()//main function to use all our declared function
+{  enqueue(5);
+  enqueue(10);
+  enqueue(15);
+  enqueue(20);
+  enqueue(25);
+  printf("Queue:");
+  display();
+  printf("\nQueue After Dequeue:");
+  dequeue();
+  display();}
+
